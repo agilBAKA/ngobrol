@@ -12,7 +12,6 @@
     <title>WebApp Chatting - assignment of campus Technoloy WEB</title>
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
-    <link rel="stylesheet" href="dist/css/plugins.min.css">
     <link rel="stylesheet" href="dist/css/style.css">
      
 </head>
@@ -20,8 +19,8 @@
     
     <?php
     if(isset($_POST['my_id']) && isset($_POST['partner_id'])){
-        $my_id       = $_POST['my_id'];
-        $partner_id  = $_POST['partner_id'];
+        $my_id       = $_POST['my_id'];         // mengambil id saya
+        $partner_id  = $_POST['partner_id'];    // mengambil id partner
 
     }
     ?>
@@ -37,13 +36,13 @@
             <div id="dataHelper" last-id=""></div>
         </div>
         <div class="footer-chat">
-            <form method="post" id="msenger" action="">
+            <form method="post" id="fieldMessage" action="">
                 <div class="box-text">
                     <textarea name="msg" id="msg-min"></textarea>
                 </div>
                 <input type="hidden" name="my_id" value="<?php echo $my_id;?>">
                 <input type="hidden" name="partner_id" value="<?php echo $partner_id;?>">
-                <input type="submit" value="" id="sb-mt">
+                <input type="submit" value="" id="send-message">
             </form>
          </div>
     </section>
@@ -53,23 +52,25 @@
     <script src="dist/js/livestamp.js"></script>
     <script type="text/javascript">
         $(document).keyup(function(e){
-            
+
             if(e.keyCode == 13){
-                if($('#msenger textarea').val().trim() == ""){
-                    $('#msenger textarea').val('');
+                if($('#fieldMessage textarea').val().trim() == ""){
+                    $('#fieldMessage textarea').val('');
                 }else{
-                    $('#msenger textarea').attr('readonly', 'readonly');
-                    $('#sb-mt').attr('disabled', 'disabled');   // Disable submit button
+                    $('#fieldMessage textarea').attr('readonly', 'readonly');
+                    $('#send-message').addClass('btn-disable').attr('disabled', 'disabled'); 
                     sendMsg();
                 }       
             }
+
+            // ketika 
         });
         
-        $(document).keyup(function(){
+        $(document).ready(function(){
             $('#msg-min').focus();
-            $('#msenger').submit(function(e){
-                $('#msenger textarea').attr('readonly', 'readonly');
-                $('#sb-mt').attr('disabled', 'disabled');   // Disable submit button
+            $('#fieldMessage').submit(function(e){
+                $('#fieldMessage textarea').attr('readonly', 'readonly');
+                $('#send-message').addClass('btn-disable').attr('disabled', 'disabled');   // Disable submit button
                 sendMsg();
                 e.preventDefault(); 
             });
@@ -94,16 +95,16 @@
         $.ajax({
             type: 'post',
             url: 'chat-connection.php?rq=new',
-            data: $('#msenger').serialize(),
+            data: $('#fieldMessage').serialize(),
             dataType: 'json',
             success: function(rsp){
-                    $('#msenger textarea').removeAttr('readonly');
-                    $('#sb-mt').removeAttr('disabled'); // Enable submit button
+                    $('#fieldMessage textarea').removeAttr('readonly');
+                    $('#send-message').removeClass('btn-disable').removeAttr('disabled'); // Enable submit button
                     if(parseInt(rsp.status) == 0){
                         alert(rsp.msg);
                     }else if(parseInt(rsp.status) == 1){
-                        $('#msenger textarea').val('');
-                        $('#msenger textarea').focus();
+                        $('#fieldMessage textarea').val('');
+                        $('#fieldMessage textarea').focus();
                         //$design = '<div>'+rsp.msg+'<span class="time-'+rsp.lid+'"></span></div>';
                         $design = '<div class="float-fix">'+
                                         '<div class="m-rply">'+

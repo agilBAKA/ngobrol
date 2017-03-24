@@ -58,15 +58,16 @@ header.header-chat {
         border-radius: 6px;
         background: #e0ebff;
         border: 0px;
-        padding: 8px 15px;
+        padding: 14px 15px;
         height: 45px;
         resize:none;
+        font-family: $font;
         &:focus {
             outline: none;
         }
     }
 
-    #sb-mt {
+    #send-message {
         width: 45px;
         height: 45px;
         border-radius: 100%;
@@ -78,6 +79,7 @@ header.header-chat {
         right:10px;
         bottom: 15px;
         box-shadow: 0px 2px 10px -1px #3796e0;
+        cursor: pointer;
     }
 
 }
